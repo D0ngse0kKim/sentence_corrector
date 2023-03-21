@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Correct sentences",
+            "type": "process",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-m",
+                "sentence_corrector",
+                "${selectedText}"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Correct sentences and print the reason for the correction",
+            "type": "process",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "-m",
+                "sentence_corrector",
+                "\"${selectedText}\"",
+                "-r"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

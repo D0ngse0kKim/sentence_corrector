@@ -49,7 +49,59 @@ python -m sentence_corrector [-h] [--temperature TEMPERATURE] [--model MODEL] [-
     * Default settings is 0.7.
     * See [this](https://platform.openai.com/docs/api-reference/completions/create#completions/create-temperature) for details.
 * `--model MODEL` : ID of model to use
-    * Default settings is `text-davinci-002`.
-    * Model in `/v1/completions` in [Model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility) is available.
+    * Default settings is `gpt-3.5-turbo`.
+    * Model in `/v1/chat/completions` in [Model endpoint compatibility](https://platform.openai.com/docs/models/model-endpoint-compatibility) is available.
 * `--verbose, -v` : Print the number of tokens consumed.
 * `--reason, -r` : Print the reason of the correction.
+
+## Usage example
+
+### Simple Correction - 1
+
+#### Command
+
+```bash
+python -m sentence_corrector "It is possible to implement only a part of the method required by protocols."
+```
+
+#### Response
+
+```bash
+The sentence is grammatically correct as it is. However, if you want to make it more clear, you can rephrase it as "It is possible to partially implement the method required by protocols."
+```
+
+### Simple Correction - 2
+
+Print corrected sentences with reasons of correction.
+
+#### Example of command
+
+```bash
+python -m sentence_corrector "new `Vector` class uses [`array.array()`](https://docs.python.org/3/library/array.html) to store values of its component" -r
+```
+
+#### Example of response
+
+```bash
+"New `Vector` class uses [`array.array()`](https://docs.python.org/3/library/array.html) to store values of its components."
+
+The correction is changing "component" to "components" to match the plural form of "values" and make the sentence grammatically correct.
+```
+
+### Complex Correction
+
+It is possible to correct sentences including vocabulary in multiple languages.
+
+#### Example of command
+
+```bash
+python -m sentence_corrector "Class is プロトコールで定めるタイプのように働く by implementing methods required by protocol." -r
+```
+
+#### Example of response
+
+```bash
+The corrected sentence is: "The class works like a protocol-defined type by implementing the required methods."
+
+The original sentence appears to be a direct translation from Japanese, which leads to a wordy and awkward sentence structure. The corrected sentence simplifies the phrasing while still conveying the same meaning.
+```

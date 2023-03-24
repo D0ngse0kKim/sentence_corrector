@@ -24,7 +24,7 @@ def parse_argument() -> argparse.Namespace:
     parser.add_argument(
         "--model",
         help="ID of model to use",
-        default="text-davinci-002",
+        default="gpt-3.5-turbo",
         type=str,
     )
     parser.add_argument(
@@ -71,17 +71,19 @@ def correct_sentence(sentence: str, configs: dict[str, Any]) -> str:
     # Use the GPT-3 API to generate a corrected version of the sentence
     # For details, refer https://platform.openai.com/docs/api-reference/completions/create
     temperature: float = float(configs["temperature"])
-    response = openai.Completion.create(  # type: ignore
-        engine=model_engine,
-        prompt=prompt,
-        max_tokens=64,
+    response = openai.ChatCompletion.create(  # type: ignore
+        model=model_engine,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt},
+        ],
         n=1,
         stop=None,
         temperature=temperature,
     )
 
     # Extract the corrected sentence from the API response
-    returned_text: str = response.choices[0].text  # type: ignore
+    returned_text: str = response.choices[0].message.content  # type: ignore
     corrected_sentence = returned_text.strip()
 
     # If verbose is true, print the number of tokens consumed.
